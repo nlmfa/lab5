@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторная работа №5</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s ease;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        button, input[type="submit"] {
+            padding: 8px 15px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+        }
+        button:hover, input[type="submit"]:hover {
+            background-color: #e0e0e0;
+        }
+        .counter {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0 15px;
+        }
+        form {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+            width: 250px;
+            margin-right: 10px;
+        }
+        .title-input-container {
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #titleInput {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            flex: 1;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Заголовок, текст которого будем менять -->
+    <h1 id="main-title">Это начальный заголовок</h1>
+
+    <!-- Пункт 1-2: Кнопка с alert -->
+    <button id="alertButton">Нажми меня</button>
+
+    <!-- Пункт 3: Поле для ввода текста и кнопка для изменения заголовка -->
+    <div class="title-input-container">
+        <input type="text" id="titleInput" placeholder="Введите новый текст для заголовка">
+        <button id="changeTitleButton">Изменить текст заголовка</button>
+    </div>
+
+    <!-- Пункт 4: Кнопка меняет цвет фона -->
+    <button id="changeColorButton">Изменить цвет фона</button>
+
+    <!-- Пункт 5: Счётчик кликов -->
+    <div style="margin-top: 20px;">
+        <button id="incrementButton">+1</button>
+        <span class="counter" id="counterValue">0</span>
+        <button id="resetButton">Сброс</button>
+    </div>
+
+    <!-- Пункт 6: Форма с одним полем -->
+    <form id="sampleForm">
+        <label for="textInput">Введите текст:</label>
+        <input type="text" id="textInput" placeholder="Напишите что-нибудь" required>
+        <input type="submit" value="Отправить форму">
+    </form>
+
+    <script>
+        // Ждём полной загрузки DOM, чтобы все элементы точно были доступны
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // --- Пункт 1 и 2: Кнопка "Нажми меня" с alert ---
+            const alertButton = document.getElementById('alertButton');
+            alertButton.addEventListener('click', function() {
+                alert('Привет! Вы нажали на кнопку.');
+            });
+
+            // --- Пункт 3: Кнопка меняет текст заголовка h1 на тот, который ввёл пользователь ---
+            const changeTitleButton = document.getElementById('changeTitleButton');
+            const mainTitle = document.getElementById('main-title');
+            const titleInput = document.getElementById('titleInput');
+            
+            changeTitleButton.addEventListener('click', function() {
+                // Получаем текст из поля ввода
+                const newTitleText = titleInput.value.trim();
+                
+                // Проверяем, не пустой ли текст
+                if (newTitleText === '') {
+                    alert('Пожалуйста, введите текст для заголовка!');
+                } else {
+                    // Меняем текст заголовка на введённый пользователем
+                    mainTitle.textContent = newTitleText;
+                    // Очищаем поле ввода после изменения
+                    titleInput.value = '';
+                }
+            });
+
+            // --- Пункт 4: Кнопка меняет цвет фона ---
+            const changeColorButton = document.getElementById('changeColorButton');
+            changeColorButton.addEventListener('click', function() {
+                // Генерируем случайный светлый цвет (чтобы текст оставался читаемым)
+                const randomColor = 'hsl(' + Math.random() * 360 + ', 70%, 80%)';
+                document.body.style.backgroundColor = randomColor;
+            });
+
+            // --- Пункт 5: Счётчик кликов (+1 и сброс) ---
+            let count = 0; // переменная счётчика
+            const incrementButton = document.getElementById('incrementButton');
+            const resetButton = document.getElementById('resetButton');
+            const counterDisplay = document.getElementById('counterValue');
+
+            // Функция обновления отображения счётчика
+            function updateCounterDisplay() {
+                counterDisplay.textContent = count;
+            }
+
+            // Обработчик для "+1"
+            incrementButton.addEventListener('click', function() {
+                count++;
+                updateCounterDisplay();
+            });
+
+            // Обработчик для "Сброс"
+            resetButton.addEventListener('click', function() {
+                count = 0;
+                updateCounterDisplay();
+            });
+
+            // --- Пункт 6: Форма с отменой перезагрузки и выводом в консоль ---
+            const form = document.getElementById('sampleForm');
+            const textInput = document.getElementById('textInput');
+
+            form.addEventListener('submit', function(event) {
+                // 6.1 Отменяем стандартное поведение формы (перезагрузку страницы)
+                event.preventDefault();
+
+                // 6.2 Получаем значение поля и выводим в консоль
+                const enteredText = textInput.value.trim();
+                
+                if (enteredText !== '') {
+                    console.log('Введённый текст:', enteredText);
+                    alert('Форма отправлена! Текст "' + enteredText + '" выведен в консоль.');
+                    // Очищаем поле после отправки
+                    textInput.value = '';
+                } else {
+                    alert('Пожалуйста, введите какой-нибудь текст!');
+                }
+            });
+
+        }); // Конец DOMContentLoaded
+    </script>
+
+    <!-- Краткое описание для пользователя (не обязательно, но наглядно) -->
+    <hr>
+    <p><strong>Пояснение:</strong> 
+        <ul>
+            <li>Введите свой текст в поле над кнопкой "Изменить текст заголовка" и нажмите кнопку - заголовок изменится именно на ваш текст.</li>
+            <li>Все действия логируются либо через alert, либо через консоль (F12).</li>
+        </ul>
+    </p>
+</body>
+</html>
